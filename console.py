@@ -221,7 +221,6 @@ class HBNBCommand(cmd.Cmd):
     def do_update(self, args):
         """ Updates a certain object with new info """
         c_name = c_id = att_name = att_val = kwargs = ''
-
         # isolate cls from id/args, ex: (<cls>, delim, <id/args>)
         args = args.partition(" ")
         if args[0]:
@@ -278,26 +277,41 @@ class HBNBCommand(cmd.Cmd):
 
             args = [att_name, att_val]
 
-        # retrieve dictionary of current objects
+           
+             # retrieve dictionary of current objects
         new_dict = storage.all()[key]
-
+    
         # iterate through attr names and values
-        for i, att_name in enumerate(args):
-            # block only runs on even iterations
-            if (i % 2 == 0):
-                att_val = args[i + 1]  # following item is value
-                if not att_name:  # check for att_name
-                    print("** attribute name missing **")
-                    return
-                if not att_val:  # check for att_value
-                    print("** value missing **")
-                    return
-                # type cast as necessary
-                if att_name in HBNBCommand.types:
-                    att_val = HBNBCommand.types[att_name](att_val)
+        dictionary = {}
+        for i in range(0, len(args), 2):
+            key = args[i]
+            value = args[i+1]
+            if not value:
+                print("** attribute name missing **")
+                return
+            if not key:
+                print("** value missing **")
+                return
+            if key in HBNBCommand.types:
+                value = HBNBCommand.types[key](value)
+            dictionary[key] = value
+            new_dict.__dict__.update(dictionary)
+        # for i, att_name in enumerate(args):
+        #     # block only runs on even iterations
+        #     if (i % 2 == 0):
+        #         att_val = args[i + 1]  # following item is value
+        #         if not att_name:  # check for att_name
+        #             print("** attribute name missing **")
+        #             return
+        #         if not att_val:  # check for att_value
+        #             print("** value missing **")
+        #             return
+        #         # type cast as necessary
+        #         if att_name in HBNBCommand.types:
+        #             att_val = HBNBCommand.types[att_name](att_val)
 
-                # update dictionary with name, value pair
-                new_dict.__dict__.update({att_name: att_val})
+        #         # update dictionary with name, value pair
+        #     new_dict.__dict__.update({att_name: att_val})   
 
         new_dict.save()  # save updates to file
 
@@ -316,26 +330,31 @@ class HBNBCommand(cmd.Cmd):
             cls_name = my_args[0]
             if cls_name not in HBNBCommand.classes:
                 raise NameError
-            my_args.pop(0)
-            kwargs = {}
-            for i in range(len(my_args)):
-                key, value = tuple(my_args[i].split("="))
-                if value[0] == '"':
-                    value = value.strip('"').replace("_", " ")
-                else:
-                    try:
-                        value = eval(value)
-                    except (SyntaxError, NameError):
-                        continue
-                kwargs[key] = value
+            if len(my_args) <= 1:
+                new_instance = HBNBCommand.classes[cls_name]()
+                new_instance.save()
+                print(new_instance.id)
+            else:
+                my_args.pop(0)
+                kwargs = {}
+                for i in range(len(my_args)):
+                    key, value = tuple(my_args[i].split("="))
+                    if value[0] == '"':
+                      value = value.strip('"').replace("_", " ")
+                    else:
+                        try:
+                            value = eval(value)
+                        except (SyntaxError, NameError):
+                            continue
+                    kwargs[key] = value
+                
+                
                 new_instance = HBNBCommand.classes[cls_name]()
                 new_instance.save()
                 if kwargs != {}:
                     args = "{} {} {}".format(cls_name, new_instance.id, kwargs)
                     self.do_update(args)
-            print(new_instance.id)
-            # args = [cls_name, new_instance.id, kwargs]
-            # self.do_update(args)
+                print(new_instance.id)
         except SyntaxError:
             print("** class name missing **")
         except NameError:
