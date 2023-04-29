@@ -296,23 +296,6 @@ class HBNBCommand(cmd.Cmd):
                 value = HBNBCommand.types[key](value)
             dictionary[key] = value
             new_dict.__dict__.update(dictionary)
-        # for i, att_name in enumerate(args):
-        #     # block only runs on even iterations
-        #     if (i % 2 == 0):
-        #         att_val = args[i + 1]  # following item is value
-        #         if not att_name:  # check for att_name
-        #             print("** attribute name missing **")
-        #             return
-        #         if not att_val:  # check for att_value
-        #             print("** value missing **")
-        #             return
-        #         # type cast as necessary
-        #         if att_name in HBNBCommand.types:
-        #             att_val = HBNBCommand.types[att_name](att_val)
-
-        #         # update dictionary with name, value pair
-        #     new_dict.__dict__.update({att_name: att_val})   
-
         new_dict.save()  # save updates to file
 
     def help_update(self):
@@ -358,7 +341,7 @@ class HBNBCommand(cmd.Cmd):
         except SyntaxError:
             print("** class name missing **")
         except NameError:
-            print("** class doesn't exist **")    
+            print("** class doesn't exist **")  
 
 if __name__ == "__main__":
     HBNBCommand().cmdloop()
