@@ -192,11 +192,12 @@ class HBNBCommand(cmd.Cmd):
             if args not in HBNBCommand.classes:
                 print("** class doesn't exist **")
                 return
-            for k, v in storage._FileStorage__objects.items():
+            
+            for k, v in storage.all():
                 if k.split('.')[0] == args:
                     print_list.append(str(v))
         else:
-            for k, v in storage._FileStorage__objects.items():
+            for k, v in storage.all():
                 print_list.append(str(v))
 
         print(print_list)
@@ -332,11 +333,12 @@ class HBNBCommand(cmd.Cmd):
                     kwargs[key] = value
                 
                 
-                new_instance = HBNBCommand.classes[cls_name]()
-                new_instance.save()
-                if kwargs != {}:
-                    args = "{} {} {}".format(cls_name, new_instance.id, kwargs)
-                    self.do_update(args)
+                new_instance = HBNBCommand.classes[cls_name](**kwargs)
+                storage.new(new_instance)
+                storage.save()
+                #if kwargs != {}:
+                 #   args = "{} {} {}".format(cls_name, new_instance.id, kwargs)
+                  #  self.do_update(args)
                 print(new_instance.id)
         except SyntaxError:
             print("** class name missing **")

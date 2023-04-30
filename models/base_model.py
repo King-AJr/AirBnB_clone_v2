@@ -11,7 +11,7 @@ class BaseModel:
     def __init__(self, *args, **kwargs):
         """Instatntiates a new model"""
 
-        id = Column(String, primary_key=True)
+        id = Column(String(60), primary_key=True, nullable=False)
         created_at = Column(DateTime, default=datetime.utcnow(), nullable=False)
         updated_at = Column(DateTime, default=datetime.utcnow(), nullable=False)
         self.id = str(uuid4())
