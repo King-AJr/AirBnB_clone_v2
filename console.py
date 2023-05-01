@@ -194,11 +194,17 @@ class HBNBCommand(cmd.Cmd):
                 return
             all_instance = storage.all(eval(args)) 
             for k in all_instance:
-                print([k.__str__()])
+                string = str(k.__str__())
+                first_colon = string.find(":")
+                result = string[first_colon+1:]
+                print("[{}]".format(result))
         else:
             all_instance = storage.all()
             for k in all_instance:
-                print([k.__str__()])
+                string = str(k.__str__())
+                first_colon = string.find(":")
+                result = string[first_colon+1:]
+                print("[{}]".format(result))
 
 
     def help_all(self):
