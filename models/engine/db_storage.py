@@ -34,19 +34,19 @@ HBNB_MYSQL_USER, HBNB_MYSQL_PWD, HBNB_MYSQL_HOST, HBNB_MYSQL_DB)
 
     
    def all(self, cls=None):
-      """ Query db for classes """
-      if cls == None:
-         tables = [State, City, User, Place, Review, Amenity]
-         objs = []
-         for table in tables:
+    """ Query db for classes """
+    objs = []
+    if cls is None:
+        tables = [State, City, User, Place, Review, Amenity]
+        for table in tables:
             objs.extend(self.__session.query(table).all())
-      else:
-         if type(cls) == str:
+    else:
+        if type(cls) == str:
             cls = eval(cls)
-            objs = self.__session.query(cls).all()
-      for i in objs:
-         return {"{}.{}: {}".format(type(i).__name__, i.id, i)}
-      
+        objs = self.__session.query(cls).all()
+
+    return {"{}.{}: {}".format(type(i).__name__, i.id, i) for i in objs}
+
     
    def new(self, obj):
       """add new object to session"""
