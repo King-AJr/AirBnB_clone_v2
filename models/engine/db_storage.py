@@ -11,6 +11,7 @@ from models.city import City
 from models.amenity import Amenity
 from models.review import Review
 from sqlalchemy.orm import scoped_session
+import warnings
 
 
 class DBStorage:
@@ -27,6 +28,7 @@ class DBStorage:
       connection_string = 'mysql+mysqldb://{}:{}@{}/{}'.format(
 HBNB_MYSQL_USER, HBNB_MYSQL_PWD, HBNB_MYSQL_HOST, HBNB_MYSQL_DB)
       self.__engine = create_engine(connection_string, pool_pre_ping=True)
+      warnings.filterwarnings('ignore', category=Warning, message='.*1681.*', module='sqlalchemy')
       if HBNB_ENV == 'test':
          Base.metadata.drop_all(bind=self.__engine)
       Session = sessionmaker(bind=self.__engine)
