@@ -25,9 +25,10 @@ class DBStorage:
       HBNB_MYSQL_PWD = getenv('HBNB_MYSQL_PWD')
       HBNB_MYSQL_HOST = getenv('HBNB_MYSQL_HOST')
       HBNB_MYSQL_DB = getenv('HBNB_MYSQL_DB')
-      connection_string = 'mysql+mysqldb://{}:{}@{}/{}'.format(
+      if HBNB_MYSQL_PWD != None:
+         connection_string = 'mysql+mysqldb://{}:{}@{}/{}'.format(
 HBNB_MYSQL_USER, HBNB_MYSQL_PWD, HBNB_MYSQL_HOST, HBNB_MYSQL_DB)
-      self.__engine = create_engine(connection_string, pool_pre_ping=True)
+         self.__engine = create_engine(connection_string, pool_pre_ping=True)
       warnings.filterwarnings('ignore', category=Warning, message='.*1681.*', module='sqlalchemy')
       if HBNB_ENV == 'test':
          Base.metadata.drop_all(bind=self.__engine)

@@ -1,8 +1,9 @@
 #!/usr/bin/python3
 """ Place Module for HBNB project """
 from models.base_model import BaseModel, Base
-from sqlalchemy import Column, String, Float, Integer, ForeignKey
+from sqlalchemy import Column, String, Float, Integer, ForeignKey, Table
 import models
+from os import getenv
 
 
 
@@ -48,7 +49,7 @@ class Place(BaseModel, Base):
                     reviews.append(review)
             return reviews
 
-         @property
+        @property
         def amenities(self):
             """Get/set linked Amenities."""
             amenity_list = []
